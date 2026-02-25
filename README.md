@@ -66,6 +66,13 @@ We built `scikit-learn` Pipelines integrating `StandardScaler` to prevent data l
 * **The Minority Challenge:** While LightGBM performs well overall, the detailed classification report shows it struggles to identify the youth segments (Group 1 Recall: ~0.31) due to the heavy dataset imbalance, while easily isolating distinct senior segments (Group 6 Precision: 0.57).
 * **PCA (Unsupervised):** A 2D Principal Component Analysis projection confirmed that classes overlap heavily. Age prediction relies on continuous behavioral blending rather than strict linear boundaries.
 
+### 4. A/B Test: Feature Selection vs. Full Dataset
+To validate our dimensionality reduction approach, an experiment was conducted by training the baseline models on the complete dataset (1288 features) including encoded categorical variables.
+
+* **Logistic Regression & Random Forest:** Performance degraded (F1 dropped, and LR training time increased by 10x). The inclusion of ~1000 noisy features overwhelmed the linear optimization and degraded the random subspace selection in RF.
+* **LightGBM:** Handled the noise perfectly and improved its F1-Score from 0.463 to 0.476. This 1.3% boost is attributed directly to the inclusion of encoded categorical features (like `device_brand` and Region), not the remaining sparse numeric columns.
+* **Strategic Decision:** For the next sprint, we will construct a "Golden Dataset" combining the Top 200 numeric features with the key categorical features to maximize predictive power while avoiding the curse of dimensionality.
+
 ---
 
 ## 🛠 Tech Stack
